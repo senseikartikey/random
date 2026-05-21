@@ -148,11 +148,11 @@
             adultElement.textContent = `${current} ${current === 1 ? 'Adult' : 'Adults'}`;
         }
         function updateStateText() {
-            const stateElement = document.querySelector('.interstate');
-            // Toggle between the two values
-            stateElement.textContent = stateElement.textContent === 'INTERSTATE' 
-                ? 'INTRASTATE' 
-                : 'INTERSTATE';
+            const el = document.querySelector('.interstate');
+            const isInterstate = el.dataset.mode !== 'intra';
+            el.dataset.mode = isInterstate ? 'intra' : 'inter';
+            el.textContent = isInterstate ? 'INTRASTATE' : 'INTERSTATE';
+            el.classList.toggle('intrastate', isInterstate);
         }
 
         updateCountdown();
