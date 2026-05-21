@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="color.css">
     <meta name="apple-mobile-web-app-status-bar-style" content="#1d86d7">
-    <meta name="theme-color" content="#1d86d7"/>
+    <meta name="theme-color" content="#1d86d7" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="NJ Transit">
     <link rel="apple-touch-icon" href="icon.png">
@@ -51,14 +51,15 @@
                 <div class="color-block green"></div>
                 <div class="color-block blue"></div>
             </div>
-            <div class="progress-bar"></div>
-            <div class="expiry">Expires in <span id="countdown">1</span> days.</div>
+            <div class="progress-bar" id="progress-bar"></div>
+            <!-- <div class="expiry">Expires in <span id="countdown">60:00</span></div> -->
+            <div class="expiry"><span class="expires-text">Expires in </span><span id="countdown">60:00</span></div>
             <div class="validator">View Onboard Validator Instructions</div>
         </div>
 
     </div>
 
-    <script>
+    <!-- <script>
         function updateMonthAndYear() {
             var currentDate = new Date();
             var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -92,6 +93,54 @@
         updateMonthAndYear();
         updateCountdown();
         setInterval(updateCountdown, 1000);
+    </script> -->
+
+    <script>
+        function updateMonthAndYear() {
+            var currentDate = new Date();
+            var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            var month = monthNames[currentDate.getMonth()];
+            var year = currentDate.getFullYear();
+            document.getElementById("pass_month_year").innerHTML = month + "<br>" + year;
+        }
+
+        function updateZoneText() {
+            const zoneElement = document.querySelector('.number');
+            let currentZone = parseInt(zoneElement.textContent, 10);
+            currentZone = currentZone === 9 ? 2 : currentZone + 1;
+            zoneElement.textContent = currentZone;
+        }
+
+        const duration = 60 * 60 * 1000;
+
+        localStorage.setItem('ticketStart', Date.now().toString());
+        const startTime = parseInt(localStorage.getItem('ticketStart'));
+
+        function updateCountdown() {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(duration - elapsed, 0);
+
+            if (remaining === 0) {
+                document.getElementById('countdown').textContent = 'EXPIRED';
+                document.querySelector('.expiry').style.color = 'red';
+                document.querySelector('.progress-bar').style.setProperty('--progress-width', '0%');
+                return;
+            }
+
+            const totalMinutes = Math.floor(remaining / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+            const mm = String(totalMinutes).padStart(2, '0');
+            const ss = String(seconds).padStart(2, '0');
+
+            document.getElementById('countdown').textContent = `${mm}:${ss}`;
+
+            const progressPercent = ((duration - remaining) / duration) * 100 + 1;
+            document.querySelector('.progress-bar').style.setProperty('--progress-width', `${progressPercent}%`);
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        updateMonthAndYear();
     </script>
 
 </body>
