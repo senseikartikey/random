@@ -34,7 +34,7 @@
             </div>
             <div class="tap">Tap to enlarge</div>
             <hr class="divider">
-            <div class="interstate">INTERSTATE</div>
+            <div class="interstate" onclick="updateStateText()">INTERSTATE</div>
             <div class="details-row">
                 <div class="month" id="pass_month_year">NOV<br>2025</div>
                 <div class="zone">
@@ -146,6 +146,13 @@
             current = current === 5 ? 1 : current + 1;
             // Use singular "Adult" for 1, plural "Adults" otherwise
             adultElement.textContent = `${current} ${current === 1 ? 'Adult' : 'Adults'}`;
+        }
+        function updateStateText() {
+            const stateElement = document.querySelector('.interstate');
+            // Toggle between the two values
+            stateElement.textContent = stateElement.textContent === 'INTERSTATE' 
+                ? 'INTRASTATE' 
+                : 'INTERSTATE';
         }
 
         updateCountdown();
