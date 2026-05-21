@@ -207,7 +207,7 @@ hr.divider {
     justify-content: space-between;
     width: 95%;
     gap: 0px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     animation: blinker 2s ease-in-out infinite;
 }
 
