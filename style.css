@@ -15,7 +15,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(29vh + env(safe-area-inset-top));
+    height: calc(35vh + env(safe-area-inset-top));
     background-color: #1d86d7;
     border-bottom-left-radius: 4% 8%;
     border-bottom-right-radius: 4% 8%;
