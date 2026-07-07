@@ -20,9 +20,7 @@
 
     <!-- Blue header background -->
     <div class="curved-background"
-     id="curved-background"
-     onclick="cycleColors()"
-     ontouchstart="cycleColors()">
+     id="curved-background">
     </div>
 
     <!-- Title -->
@@ -33,9 +31,7 @@
 
         <!-- Top content -->
         <div class="card-top">
-            <div class="qr"
-            onclick="cycleColors()"
-            ontouchstart="cycleColors()">
+            <div class="qr" id="qr-frame">
                 <img class="qr-code" src="your-qr-code-image.png" id="QRCODE" alt="QR Code">
             </div>
             <div class="tap">Tap to enlarge</div>
@@ -65,42 +61,6 @@
         </div>
 
     </div>
-
-    <!-- <script>
-        function updateMonthAndYear() {
-            var currentDate = new Date();
-            var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-            var month = monthNames[currentDate.getMonth()];
-            var year = currentDate.getFullYear();
-            document.getElementById("pass_month_year").innerHTML = month + "<br>" + year;
-        }
-
-        function updateZoneText() {
-            const zoneElement = document.querySelector('.number');
-            let currentZone = parseInt(zoneElement.textContent, 10);
-            currentZone = currentZone === 9 ? 2 : currentZone + 1;
-            zoneElement.textContent = currentZone;
-        }
-
-        function updateCountdown() {
-            const countdown = document.getElementById('countdown');
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth();
-            const deadlineDate = new Date(currentDate.getFullYear(), currentMonth + 1, 1);
-            const timeRemaining = deadlineDate - currentDate;
-            const remainingDays = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            const totalDaysInMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate();
-            const daysPassed = currentDate.getDate();
-            const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
-            countdown.textContent = remainingDays.toString();
-            document.querySelector('.progress-bar').style.setProperty('--progress-width', `${100 - progressPercentage}%`);
-        }
-
-        document.querySelector('meta[name="theme-color"]').setAttribute("content", "#1d86d7");
-        updateMonthAndYear();
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    </script> -->
 
     <script>
         function updateMonthAndYear() {
@@ -161,137 +121,41 @@
             el.classList.toggle('intrastate', isInterstate);
         }
 
-        /* ===========================
-        COLOR THEMES
-        ===========================
-
-        const themes = [
-            {
-                first: "#0066ff",
-                stripone: "#56ab68",
-                striptwo: "#c6a4a3",
-                stripthree: "#84255c"
-            },
-            {
-                first: "#2bb34a",
-                stripone: "#f0d94b",
-                striptwo: "#6fd16d",
-                stripthree: "#0b6623"
-            },
-            {
-                first: "#f04b4b",
-                stripone: "#ffd166",
-                striptwo: "#ff9f9f",
-                stripthree: "#8b0000"
-            },
-            {
-                first: "#ff9800",
-                stripone: "#ffe082",
-                striptwo: "#ffcc80",
-                stripthree: "#ef6c00"
-            },
-            {
-                first: "#7b61ff",
-                stripone: "#d1c4e9",
-                striptwo: "#b39ddb",
-                stripthree: "#4527a0"
-            },
-            {
-                first: "#00acc1",
-                stripone: "#80deea",
-                striptwo: "#4dd0e1",
-                stripthree: "#006064"
-            }
-        ];
-
-        let currentTheme =
-            parseInt(localStorage.getItem("themeIndex")) || 0;
-
-        function applyTheme(index) {
-
-            const t = themes[index];
-
-            const root = document.documentElement;
-
-            root.style.setProperty("--first", t.first);
-            root.style.setProperty("--stripone", t.stripone);
-            root.style.setProperty("--striptwo", t.striptwo);
-            root.style.setProperty("--stripthree", t.stripthree);
-
-            document.getElementById("curved-background").style.backgroundColor = t.first;
-            document.body.style.backgroundColor = t.first;
-
-            document.querySelector('meta[name="theme-color"]')
-                .setAttribute("content", t.first);
-        }
-
-        function changeTheme() {
-
-            currentTheme++;
-
-            if (currentTheme >= themes.length)
-                currentTheme = 0;
-
-            localStorage.setItem("themeIndex", currentTheme);
-
-            applyTheme(currentTheme);
-        }
-
-        applyTheme(currentTheme); */
-
         const root = document.documentElement;
 
-            let colorIndex = parseInt(localStorage.getItem("colorIndex")) || 0;
+        const PALETTE = ['#0066ff', '#56ab68', '#c6a4a3', '#84255c'];
 
-            function getBaseColors() {
-                return [
-                    getComputedStyle(root).getPropertyValue('--first').trim(),
-                    getComputedStyle(root).getPropertyValue('--stripone').trim(),
-                    getComputedStyle(root).getPropertyValue('--striptwo').trim(),
-                    getComputedStyle(root).getPropertyValue('--stripthree').trim()
-                ];
-            }
+        let headerColorIndex = parseInt(localStorage.getItem("headerColorIndex")) || 0;
+        let qrColorIndex = parseInt(localStorage.getItem("qrColorIndex")) || 0;
 
-            function applyColors() {
+        function applyHeaderColor() {
+            const color = PALETTE[headerColorIndex];
+            root.style.setProperty('--header', color);
+            document.querySelector('meta[name="theme-color"]').setAttribute("content", color);
+        }
 
-                const base = getBaseColors();
+        function applyQrColor() {
+            root.style.setProperty('--qr', PALETTE[qrColorIndex]);
+        }
 
-                const colors = [];
+        function cycleHeaderColor() {
+            headerColorIndex = (headerColorIndex + 1) % PALETTE.length;
+            localStorage.setItem("headerColorIndex", headerColorIndex);
+            applyHeaderColor();
+        }
 
-                for (let i = 0; i < base.length; i++) {
-                    colors.push(base[(i + colorIndex) % base.length]);
-                }
+        function cycleQrColor() {
+            qrColorIndex = (qrColorIndex + 1) % PALETTE.length;
+            localStorage.setItem("qrColorIndex", qrColorIndex);
+            applyQrColor();
+        }
 
-                root.style.setProperty('--first', colors[0]);
-                root.style.setProperty('--stripone', colors[1]);
-                root.style.setProperty('--striptwo', colors[2]);
-                root.style.setProperty('--stripthree', colors[3]);
+        document.getElementById('curved-background').addEventListener('pointerdown', cycleHeaderColor);
+        document.getElementById('qr-frame').addEventListener('pointerdown', cycleQrColor);
 
-                //document.getElementById("curved-background").style.backgroundColor = colors[0];
-                //document.body.style.backgroundColor = colors[0];
+        applyHeaderColor();
+        applyQrColor();
 
-                document.querySelector('meta[name="theme-color"]')
-                    .setAttribute("content", colors[0]);
-            }
-
-            let lastTouch = 0;
-
-            
-            function cycleColors(e) {
-
-const now = Date.now();
-
-if (now - lastTouch < 300)
-    return;
-
-lastTouch = now;
-colorIndex = (colorIndex + 1) % 4;
-localStorage.setItem("colorIndex", colorIndex);
-applyColors();
-}
-
-            applyColors();
-        
         updateCountdown();
         setInterval(updateCountdown, 1000);
         updateMonthAndYear();
