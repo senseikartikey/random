@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="color.css">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#1d86d7">
-    <meta name="theme-color" content="#1d86d7" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#00A4E4">
+    <meta name="theme-color" content="#00A4E4" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="NJ Transit">
     <link rel="apple-touch-icon" href="icon.png">
@@ -123,7 +123,9 @@
 
         const root = document.documentElement;
 
-        const PALETTE = ['#0066ff', '#56ab68', '#c6a4a3', '#84255c'];
+        // Real NJ Transit rail line colors: North Jersey Coast, Morristown,
+        // Bergen County, Main, Northeast Corridor, Lackawanna Cut-Off, Pascack Valley
+        const PALETTE = ['#00A4E4', '#00A94F', '#B9C9DF', '#FFCF01', '#EF3E42', '#F48AA4', '#8E258D'];
 
         let headerColorIndex = parseInt(localStorage.getItem("headerColorIndex")) || 0;
         let qrColorIndex = parseInt(localStorage.getItem("qrColorIndex")) || 0;
