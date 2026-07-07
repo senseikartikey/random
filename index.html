@@ -131,18 +131,7 @@
         function applyHeaderColor() {
             const color = PALETTE[headerColorIndex];
             root.style.setProperty('--header', color);
-
-            // iOS Safari only reliably re-samples theme-color if the meta tag is
-            // removed and reinserted on a later frame, not just mutated in place.
-            const oldMeta = document.querySelector('meta[name="theme-color"]');
-            if (oldMeta) oldMeta.remove();
-
-            requestAnimationFrame(() => {
-                const newMeta = document.createElement('meta');
-                newMeta.setAttribute('name', 'theme-color');
-                newMeta.setAttribute('content', color);
-                document.head.appendChild(newMeta);
-            });
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', color);
         }
 
         function applyQrColor() {
