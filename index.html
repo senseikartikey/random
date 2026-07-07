@@ -131,7 +131,14 @@
         function applyHeaderColor() {
             const color = PALETTE[headerColorIndex];
             root.style.setProperty('--header', color);
-            document.querySelector('meta[name="theme-color"]').setAttribute("content", color);
+
+            // iOS Safari ignores setAttribute() on an existing theme-color meta
+            // after first paint; replacing the node forces it to re-read the color.
+            const oldMeta = document.querySelector('meta[name="theme-color"]');
+            const newMeta = document.createElement('meta');
+            newMeta.setAttribute('name', 'theme-color');
+            newMeta.setAttribute('content', color);
+            oldMeta.replaceWith(newMeta);
         }
 
         function applyQrColor() {
