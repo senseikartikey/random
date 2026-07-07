@@ -29,7 +29,7 @@
 
         <!-- Top content -->
         <div class="card-top">
-            <div class="qr" onclick="changeTheme()">
+            <div class="qr" onclick="cycleColors()">
                 <img class="qr-code" src="your-qr-code-image.png" id="QRCODE" alt="QR Code">
             </div>
             <div class="tap">Tap to enlarge</div>
@@ -155,9 +155,9 @@
             el.classList.toggle('intrastate', isInterstate);
         }
 
-                /* ===========================
+        /* ===========================
         COLOR THEMES
-        =========================== */
+        ===========================
 
         const themes = [
             {
@@ -231,7 +231,39 @@
             applyTheme(currentTheme);
         }
 
-        applyTheme(currentTheme);
+        applyTheme(currentTheme); */
+
+        const root = document.documentElement;
+
+        let colors = [
+            getComputedStyle(root).getPropertyValue('--first').trim(),
+            getComputedStyle(root).getPropertyValue('--stripone').trim(),
+            getComputedStyle(root).getPropertyValue('--striptwo').trim(),
+            getComputedStyle(root).getPropertyValue('--stripthree').trim()
+        ];
+
+        function applyColors() {
+
+            root.style.setProperty('--first', colors[0]);
+            root.style.setProperty('--stripone', colors[1]);
+            root.style.setProperty('--striptwo', colors[2]);
+            root.style.setProperty('--stripthree', colors[3]);
+
+            document.getElementById("curved-background").style.backgroundColor = colors[0];
+            document.body.style.backgroundColor = colors[0];
+
+            document.querySelector('meta[name="theme-color"]')
+                .setAttribute("content", colors[0]);
+        }
+
+        function cycleColors() {
+
+            colors.push(colors.shift());
+
+            applyColors();
+        }
+
+        applyColors();
         
         updateCountdown();
         setInterval(updateCountdown, 1000);
