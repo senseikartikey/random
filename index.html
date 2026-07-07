@@ -29,7 +29,7 @@
 
         <!-- Top content -->
         <div class="card-top">
-            <div class="qr" onclick="cycleColors()">
+            <div class="qr" ontouchstart="cycleColors()" onclick="cycleColors()">
                 <img class="qr-code" src="your-qr-code-image.png" id="QRCODE" alt="QR Code">
             </div>
             <div class="tap">Tap to enlarge</div>
@@ -235,35 +235,46 @@
 
         const root = document.documentElement;
 
-        let colors = [
-            getComputedStyle(root).getPropertyValue('--first').trim(),
-            getComputedStyle(root).getPropertyValue('--stripone').trim(),
-            getComputedStyle(root).getPropertyValue('--striptwo').trim(),
-            getComputedStyle(root).getPropertyValue('--stripthree').trim()
-        ];
+            let colorIndex = parseInt(localStorage.getItem("colorIndex")) || 0;
 
-        function applyColors() {
+            function getBaseColors() {
+                return [
+                    getComputedStyle(root).getPropertyValue('--first').trim(),
+                    getComputedStyle(root).getPropertyValue('--stripone').trim(),
+                    getComputedStyle(root).getPropertyValue('--striptwo').trim(),
+                    getComputedStyle(root).getPropertyValue('--stripthree').trim()
+                ];
+            }
 
-            root.style.setProperty('--first', colors[0]);
-            root.style.setProperty('--stripone', colors[1]);
-            root.style.setProperty('--striptwo', colors[2]);
-            root.style.setProperty('--stripthree', colors[3]);
+            function applyColors() {
 
-            document.getElementById("curved-background").style.backgroundColor = colors[0];
-            document.body.style.backgroundColor = colors[0];
+                const base = getBaseColors();
 
-            document.querySelector('meta[name="theme-color"]')
-                .setAttribute("content", colors[0]);
-        }
+                const colors = [];
 
-        function cycleColors() {
+                for (let i = 0; i < base.length; i++) {
+                    colors.push(base[(i + colorIndex) % base.length]);
+                }
 
-            colors.push(colors.shift());
+                root.style.setProperty('--first', colors[0]);
+                root.style.setProperty('--stripone', colors[1]);
+                root.style.setProperty('--striptwo', colors[2]);
+                root.style.setProperty('--stripthree', colors[3]);
+
+                document.getElementById("curved-background").style.backgroundColor = colors[0];
+                document.body.style.backgroundColor = colors[0];
+
+                document.querySelector('meta[name="theme-color"]')
+                    .setAttribute("content", colors[0]);
+            }
+
+            function cycleColors() {
+                colorIndex = (colorIndex + 1) % 4;
+                localStorage.setItem("colorIndex", colorIndex);
+                applyColors();
+            }
 
             applyColors();
-        }
-
-        applyColors();
         
         updateCountdown();
         setInterval(updateCountdown, 1000);
