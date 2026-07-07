@@ -19,7 +19,11 @@
 <body>
 
     <!-- Blue header background -->
-    <div class="curved-background" id="curved-background"></div>
+    <div class="curved-background"
+     id="curved-background"
+     onclick="cycleColors()"
+     ontouchstart="cycleColors()">
+    </div>
 
     <!-- Title -->
     <div class="header">One Way Ticket</div>
@@ -29,7 +33,9 @@
 
         <!-- Top content -->
         <div class="card-top">
-            <div class="qr" ontouchstart="cycleColors()" onclick="cycleColors()">
+            <div class="qr"
+            onclick="cycleColors()"
+            ontouchstart="cycleColors()">
                 <img class="qr-code" src="your-qr-code-image.png" id="QRCODE" alt="QR Code">
             </div>
             <div class="tap">Tap to enlarge</div>
@@ -268,11 +274,21 @@
                     .setAttribute("content", colors[0]);
             }
 
-            function cycleColors() {
-                colorIndex = (colorIndex + 1) % 4;
-                localStorage.setItem("colorIndex", colorIndex);
-                applyColors();
-            }
+            let lastTouch = 0;
+
+            
+            function cycleColors(e) {
+
+const now = Date.now();
+
+if (now - lastTouch < 300)
+    return;
+
+lastTouch = now;
+colorIndex = (colorIndex + 1) % 4;
+localStorage.setItem("colorIndex", colorIndex);
+applyColors();
+}
 
             applyColors();
         
