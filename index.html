@@ -153,6 +153,41 @@
         document.getElementById('curved-background').addEventListener('pointerdown', cycleHeaderColor);
         document.getElementById('qr-frame').addEventListener('pointerdown', cycleQrColor);
 
+        function setValidatorState(isZoomed) {
+            const el = document.querySelector('.validator');
+            el.classList.add('swap-fade');
+            setTimeout(() => {
+                el.textContent = isZoomed ? '‹ Back to ticket' : 'View Onboard Validator Instructions';
+                el.classList.toggle('back-button', isZoomed);
+                el.classList.remove('swap-fade');
+            }, 150);
+        }
+
+        function openQrZoom() {
+            if (document.body.classList.contains('qr-zoomed')) return;
+            document.body.classList.add('qr-zoomed');
+            setValidatorState(true);
+        }
+
+        function closeQrZoom() {
+            if (!document.body.classList.contains('qr-zoomed')) return;
+            document.body.classList.remove('qr-zoomed');
+            setValidatorState(false);
+        }
+
+        // Tapping the QR code itself zooms it in; tapping the colored
+        // frame around it still cycles the frame color (see qr-frame listener above).
+        document.getElementById('QRCODE').addEventListener('pointerdown', function (e) {
+            e.stopPropagation();
+            openQrZoom();
+        });
+
+        document.querySelector('.validator').addEventListener('click', function () {
+            if (document.body.classList.contains('qr-zoomed')) {
+                closeQrZoom();
+            }
+        });
+
         applyHeaderColor();
         applyQrColor();
 
