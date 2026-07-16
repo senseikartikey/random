@@ -110,11 +110,11 @@ body::after {
 
 /* Zoomed QR state */
 body.qr-zoomed .qr {
-    width: 100%;
+    width: 85%;
     height: auto;
     aspect-ratio: 1 / 1;
-    max-width: 340px;
-    max-height: 340px;
+    max-width: 290px;
+    max-height: 290px;
 }
 
 body.qr-zoomed .tap {
@@ -122,14 +122,22 @@ body.qr-zoomed .tap {
     pointer-events: none;
 }
 
-/* The colored header swatch fades to plain so the whole page reflows
-   around the bigger QR instead of a modal dimming the background. */
+/* The colored header swatch fades to plain white so the whole page
+   reflows around the bigger QR instead of a modal dimming the background. */
 body {
     transition: background-color 0.35s ease;
 }
 
 body.qr-zoomed {
-    background-color: #e8e8ed;
+    background-color: #fff;
+}
+
+body::after {
+    transition: background-color 0.35s ease;
+}
+
+body.qr-zoomed::after {
+    background-color: #fff;
 }
 
 .curved-background {
@@ -138,6 +146,7 @@ body.qr-zoomed {
 
 body.qr-zoomed .curved-background {
     opacity: 0;
+    pointer-events: none;
 }
 
 .header {
@@ -147,6 +156,14 @@ body.qr-zoomed .curved-background {
 body.qr-zoomed .header {
     color: #1a1a1a;
     padding-top: 30px;
+}
+
+.card {
+    transition: box-shadow 0.35s ease;
+}
+
+body.qr-zoomed .card {
+    box-shadow: none;
 }
 
 hr.divider {
