@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>One Way Ticket</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=5">
-    <link rel="stylesheet" href="color.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="color.css?v=6">
     <meta name="apple-mobile-web-app-status-bar-style" content="#5CAD5C">
     <meta name="theme-color" content="#5CAD5C" />
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -151,7 +151,7 @@
         }
 
         document.getElementById('curved-background').addEventListener('pointerdown', cycleHeaderColor);
-        document.getElementById('qr-frame').addEventListener('pointerdown', cycleQrColor);
+        document.getElementById('qr-frame').addEventListener('click', cycleQrColor);
 
         function setValidatorState(isZoomed) {
             const el = document.querySelector('.validator');
@@ -177,8 +177,16 @@
 
         // Tapping the QR code itself toggles the zoom; tapping the colored
         // frame around it still cycles the frame color (see qr-frame listener above).
-        document.getElementById('QRCODE').addEventListener('pointerdown', function (e) {
+        // Uses 'click' (fires once, after the tap is fully resolved) rather than
+        // 'pointerdown', which on iOS Safari could double-fire and immediately
+        // re-close the zoom it had just opened. qrZoomLocked is a belt-and-braces
+        // guard against any such rapid repeat firing.
+        let qrZoomLocked = false;
+        document.getElementById('QRCODE').addEventListener('click', function (e) {
             e.stopPropagation();
+            if (qrZoomLocked) return;
+            qrZoomLocked = true;
+            setTimeout(() => { qrZoomLocked = false; }, 400);
             if (document.body.classList.contains('qr-zoomed')) {
                 closeQrZoom();
             } else {
