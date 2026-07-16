@@ -381,7 +381,7 @@ hr.divider {
 }
 
 .validator.back-button {
-    background: var(--header, #003366);
+    background: #003366;
     color: #fff;
     text-decoration: none;
     font-weight: 700;
