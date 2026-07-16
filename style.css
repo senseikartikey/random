@@ -141,11 +141,14 @@ body.qr-zoomed::after {
 }
 
 .curved-background {
-    transition: opacity 0.35s ease;
+    transition: opacity 0.35s ease, background-color 0.35s ease;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 body.qr-zoomed .curved-background {
     opacity: 0;
+    background-color: #fff;
     pointer-events: none;
 }
 
