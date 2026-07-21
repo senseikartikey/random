@@ -141,14 +141,35 @@ body.qr-zoomed::after {
 }
 
 .curved-background {
-    transition: opacity 0.35s ease;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
 
 body.qr-zoomed .curved-background {
-    opacity: 0;
     pointer-events: none;
+}
+
+/* Plain white cover that fades in on top of the header instead of trying
+   to fade the header's own color — iOS Safari doesn't reliably repaint
+   background-color/opacity changes on the .curved-background layer itself,
+   but a simple opacity-only fade on a fresh element is reliable everywhere. */
+.curved-background-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(33vh + env(safe-area-inset-top));
+    background: #fff;
+    border-bottom-left-radius: 5% 8%;
+    border-bottom-right-radius: 5% 8%;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+body.qr-zoomed .curved-background-cover {
+    opacity: 1;
 }
 
 .header {
