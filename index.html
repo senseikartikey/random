@@ -171,12 +171,14 @@
         function openQrZoom() {
             if (document.body.classList.contains('qr-zoomed')) return;
             document.body.classList.add('qr-zoomed');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
             setValidatorState(true);
         }
 
         function closeQrZoom() {
             if (!document.body.classList.contains('qr-zoomed')) return;
             document.body.classList.remove('qr-zoomed');
+            applyHeaderColor();
             setValidatorState(false);
         }
 
