@@ -146,10 +146,21 @@
             document.head.appendChild(meta);
         }
 
+        function forceNotchRepaint() {
+            // iOS Safari tints the safe-area/notch strip by sampling a fixed
+            // element's background-color once, and only re-samples on certain
+            // triggers (e.g. a scroll gesture) — not on ordinary CSS color
+            // changes. Nudging scroll by a pixel and back forces that resample.
+            const y = window.scrollY;
+            window.scrollTo(0, y + 1);
+            requestAnimationFrame(() => window.scrollTo(0, y));
+        }
+
         function applyHeaderColor() {
             const color = PALETTE[headerColorIndex];
             root.style.setProperty('--header', color);
             setThemeColor(color);
+            forceNotchRepaint();
         }
 
         function applyQrColor() {
@@ -185,6 +196,7 @@
             if (document.body.classList.contains('qr-zoomed')) return;
             document.body.classList.add('qr-zoomed');
             setThemeColor('#ffffff');
+            forceNotchRepaint();
             setValidatorState(true);
         }
 
