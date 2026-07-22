@@ -133,10 +133,23 @@
         let headerColorIndex = parseInt(localStorage.getItem("headerColorIndex")) || 0;
         let qrColorIndex = parseInt(localStorage.getItem("qrColorIndex")) || 0;
 
+        function setThemeColor(color) {
+            // iOS Safari doesn't reliably repaint the status bar when an
+            // existing theme-color meta's content attribute is mutated —
+            // it only re-reads the value when the element itself is
+            // (re)inserted into the document.
+            const old = document.querySelector('meta[name="theme-color"]');
+            if (old) old.remove();
+            const meta = document.createElement('meta');
+            meta.setAttribute('name', 'theme-color');
+            meta.setAttribute('content', color);
+            document.head.appendChild(meta);
+        }
+
         function applyHeaderColor() {
             const color = PALETTE[headerColorIndex];
             root.style.setProperty('--header', color);
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', color);
+            setThemeColor(color);
         }
 
         function applyQrColor() {
@@ -171,7 +184,7 @@
         function openQrZoom() {
             if (document.body.classList.contains('qr-zoomed')) return;
             document.body.classList.add('qr-zoomed');
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+            setThemeColor('#ffffff');
             setValidatorState(true);
         }
 
